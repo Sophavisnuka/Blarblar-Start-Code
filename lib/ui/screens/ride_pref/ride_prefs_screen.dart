@@ -2,6 +2,7 @@ import 'package:blabla/model/ride_pref/ride_pref.dart';
 import 'package:blabla/services/ride_prefs_service.dart';
 import 'package:flutter/material.dart';
 import '../../theme/theme.dart';
+import '../../widgets/actions/bla_button.dart';
 import 'widgets/ride_prefs_form.dart';
 import 'widgets/ride_prefs_tile.dart';
 
@@ -50,8 +51,9 @@ class RidePrefsScreen extends StatelessWidget {
             children: [
               // 2 - THE FORM
               RidePrefForm(initRidePref: RidePrefsService.selectedRidePref),
+              // BLA - 002 - Implement BlaButton
+              BlaButton(label: 'Search', textColor: Colors.white,),
               SizedBox(height: BlaSpacings.m),
-
               // 3 - THE HISTORY
               _buildHistory(),
             ],
