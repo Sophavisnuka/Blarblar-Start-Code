@@ -52,7 +52,7 @@ class RidePrefsScreen extends StatelessWidget {
               // 2 - THE FORM
               RidePrefForm(initRidePref: RidePrefsService.selectedRidePref),
               // BLA - 002 - Implement BlaButton
-              BlaButton(label: 'Search', textColor: Colors.white,),
+              BlaButton(label: 'Search', backgroundColor: BlaColors.primary ,textColor: Colors.white,),
               SizedBox(height: BlaSpacings.m),
               // 3 - THE HISTORY
               _buildHistory(),
