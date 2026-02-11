@@ -1,3 +1,4 @@
+import 'package:blabla/ui/screens/ride_location_picker.dart';
 import 'package:blabla/ui/theme/theme.dart';
 import 'package:blabla/ui/widgets/display/bla_divider.dart';
 import 'package:flutter/material.dart';
@@ -61,6 +62,37 @@ class _RidePrefFormState extends State<RidePrefForm> {
       });
     }
   }
+  
+  void selectDeparture() async {
+    final leaving = await Navigator.of(context).push(
+      MaterialPageRoute(builder: (builder) => RideLocationPicker())
+    );
+    setState(() {
+      if (leaving != null) {
+        departure = leaving;
+      }
+    });
+  }
+  void selectArrival() async {
+    final going = await Navigator.of(context).push(
+      MaterialPageRoute(builder: (builder) => RideLocationPicker())
+    );
+    setState(() {
+      if (going != null) {
+        arrival = going;
+      }
+    });
+  }
+  
+  void swapLocation() async {
+    setState(() {
+      if ( departure != null && arrival != null ) {
+        final swap = departure;
+        departure = arrival;
+        arrival = swap;
+      }
+    });
+  }
   // ----------------------------------
   // Compute the widgets rendering
   // ----------------------------------
@@ -79,13 +111,15 @@ class _RidePrefFormState extends State<RidePrefForm> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [ 
               _onClickButton(
-                text: 'Leaving from',
-                icon: Icons.circle_outlined
+                text: departure?.name ?? 'Leaving from',
+                icon: Icons.circle_outlined,
+                onPressed: selectDeparture
               ),
               BlaDivider(),
               _onClickButton(
-                text: 'Going to',
-                icon: Icons.circle_outlined
+                text: arrival?.name ?? 'Going to',
+                icon: Icons.circle_outlined,
+                onPressed: selectArrival
               ),
               BlaDivider(),
               _onClickButton(
@@ -105,7 +139,7 @@ class _RidePrefFormState extends State<RidePrefForm> {
           right: 10,
           top: 15,
           child: InkWell(
-            onTap: () {},
+            onTap: swapLocation,
             borderRadius: BorderRadius.circular(20),
             child: Padding(
               padding: const EdgeInsets.all(6),
