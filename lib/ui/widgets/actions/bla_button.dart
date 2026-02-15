@@ -11,30 +11,48 @@ import '../../theme/theme.dart';
 /// - [icon]: Optional icon to display before the text
 /// - [iconColor]: The color of the icon (optional, defaults to white)
 /// - [onPressed]: Callback function when button is pressed (optional)
+///
+enum ButtonType{ primary, secondary }
 class BlaButton extends StatelessWidget {
-  BlaButton({
+  const BlaButton({
     super.key, 
     required this.label,
-    required this.textColor,
+    this.type = ButtonType.primary,
     this.icon, 
     this.iconColor = Colors.white, 
     this.onPressed,
-    Color? backgroundColor
-  }) : backgroundColor = backgroundColor ?? BlaColors.primary;
+  });
   
+  final ButtonType type;
   final String label;
-  final Color textColor;
-  final Color backgroundColor;
   final IconData? icon;
   final Color iconColor;
   final VoidCallback? onPressed;
+
+  Color get buttonBackgroundColor {
+    switch(type) {
+      case ButtonType.primary:
+        return BlaColors.backGroundColor;
+      case ButtonType.secondary:
+        return BlaColors.greyLight;
+    }
+  }
+
+  Color get buttonTextColor {
+    switch(type) {
+      case ButtonType.primary:
+        return Colors.white;
+      case ButtonType.secondary:
+        return BlaColors.white;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed ?? () {}, 
       style: ElevatedButton.styleFrom(
-        backgroundColor: backgroundColor,
+        backgroundColor: buttonBackgroundColor,
         padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
@@ -50,7 +68,7 @@ class BlaButton extends StatelessWidget {
           ],
           Text(
             label, 
-            style: BlaTextStyles.button.copyWith(color: textColor)
+            style: BlaTextStyles.button.copyWith(color: buttonTextColor)
           ),
         ],
       ),

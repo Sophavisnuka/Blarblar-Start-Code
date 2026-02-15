@@ -86,11 +86,9 @@ class _RidePrefFormState extends State<RidePrefForm> {
   
   void swapLocation() async {
     setState(() {
-      if ( departure != null && arrival != null ) {
-        final swap = departure;
-        departure = arrival;
-        arrival = swap;
-      }
+      final swap = departure;
+      departure = arrival;
+      arrival = swap;
     });
   }
   // ----------------------------------
