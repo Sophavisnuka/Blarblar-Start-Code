@@ -1,4 +1,5 @@
 import 'package:blabla/ui/screens/ride_location_picker.dart';
+import 'package:blabla/ui/screens/seat_picker.dart';
 import 'package:blabla/ui/theme/theme.dart';
 import 'package:blabla/ui/widgets/display/bla_divider.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,6 @@ import '../../../../model/ride_pref/ride_pref.dart';
 ///   - A number of seats
 ///
 /// The form can be created with an existing RidePref (optional).
-///
 class RidePrefForm extends StatefulWidget {
   // The form can be created with an optional initial RidePref.
   final RidePref? initRidePref;
@@ -22,10 +22,10 @@ class RidePrefForm extends StatefulWidget {
   const RidePrefForm({super.key, this.initRidePref});
 
   @override
-  State<RidePrefForm> createState() => _RidePrefFormState();
+  State<RidePrefForm> createState() => RidePrefFormState();
 }
 
-class _RidePrefFormState extends State<RidePrefForm> {
+class RidePrefFormState extends State<RidePrefForm> {
   Location? departure;
   late DateTime departureDate;
   Location? arrival;
@@ -35,6 +35,17 @@ class _RidePrefFormState extends State<RidePrefForm> {
   // Initialize the Form attributes
   // ----------------------------------
   // late DateTime datePicked;
+  RidePref? getRidePref() {
+    if (departure == null && arrival == null) {
+      return null;
+    }
+    return RidePref(
+      departure: departure!, 
+      departureDate: departureDate, 
+      arrival: arrival!, 
+      requestedSeats: requestedSeats
+    );
+  }
 
   @override
   void initState() {
@@ -91,6 +102,16 @@ class _RidePrefFormState extends State<RidePrefForm> {
       arrival = swap;
     });
   }
+  void selectSeat() async {
+    final seat = await Navigator.of(context).push(
+      MaterialPageRoute(builder: (builder)=>SeatPicker(initialSeatCount: requestedSeats))
+    );
+    if (seat != null) {
+      setState(() {
+        requestedSeats = seat;
+      });
+    }
+  }
   // ----------------------------------
   // Compute the widgets rendering
   // ----------------------------------
@@ -128,7 +149,8 @@ class _RidePrefFormState extends State<RidePrefForm> {
               BlaDivider(),
               _onClickButton(
                 icon: Icons.people_alt, 
-                text: '1'
+                text: requestedSeats.toString(),
+                onPressed: selectSeat
               )
             ]
           )
