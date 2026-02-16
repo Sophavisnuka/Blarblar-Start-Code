@@ -56,7 +56,7 @@ class RideScreen extends StatelessWidget {
                     style: BlaTextStyles.label,
                   ),
                   Text(
-                    'Seat: 1',
+                    'Seat: ${ridePref.requestedSeats}',
                     style: BlaTextStyles.label,
                   ),
                 ],

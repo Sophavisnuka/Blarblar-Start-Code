@@ -1,4 +1,5 @@
 import 'package:blabla/ui/screens/ride_location_picker.dart';
+import 'package:blabla/ui/screens/seat_picker.dart';
 import 'package:blabla/ui/theme/theme.dart';
 import 'package:blabla/ui/widgets/display/bla_divider.dart';
 import 'package:flutter/material.dart';
@@ -101,6 +102,16 @@ class RidePrefFormState extends State<RidePrefForm> {
       arrival = swap;
     });
   }
+  void selectSeat() async {
+    final seat = await Navigator.of(context).push(
+      MaterialPageRoute(builder: (builder)=>SeatPicker(initialSeatCount: requestedSeats))
+    );
+    if (seat != null) {
+      setState(() {
+        requestedSeats = seat;
+      });
+    }
+  }
   // ----------------------------------
   // Compute the widgets rendering
   // ----------------------------------
@@ -138,7 +149,8 @@ class RidePrefFormState extends State<RidePrefForm> {
               BlaDivider(),
               _onClickButton(
                 icon: Icons.people_alt, 
-                text: '1'
+                text: requestedSeats.toString(),
+                onPressed: selectSeat
               )
             ]
           )
