@@ -1,5 +1,6 @@
 import 'package:blabla/model/ride_pref/ride_pref.dart';
 import 'package:blabla/services/ride_prefs_service.dart';
+import 'package:blabla/ui/screens/ride_screen.dart';
 import 'package:flutter/material.dart';
 import '../../theme/theme.dart';
 import '../../widgets/actions/bla_button.dart';
@@ -13,8 +14,15 @@ const String blablaHomeImagePath = 'assets/images/blabla_home.png';
 /// - Enter his/her ride preference and launch a search on it
 /// - Or select a last entered ride preferences and launch a search on it
 ///
-class RidePrefsScreen extends StatelessWidget {
+class RidePrefsScreen extends StatefulWidget {
   const RidePrefsScreen({super.key});
+
+  @override
+  State<RidePrefsScreen> createState() => _RidePrefsScreenState();
+}
+class _RidePrefsScreenState extends State<RidePrefsScreen> {
+
+  final GlobalKey<RidePrefFormState> formKey = GlobalKey<RidePrefFormState>();
 
   void onRidePrefSelected(RidePref ridePref) {
     // TODO
@@ -50,9 +58,29 @@ class RidePrefsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // 2 - THE FORM
-              RidePrefForm(initRidePref: RidePrefsService.selectedRidePref),
+              RidePrefForm(
+                initRidePref: RidePrefsService.selectedRidePref,
+                key: formKey,
+              ),
               // BLA - 002 - Implement BlaButton
-              BlaButton(label: 'Search',),
+              BlaButton(
+                label: 'Search',
+                onPressed: () {
+                  final ridePref = formKey.currentState?.getRidePref();
+                  if (ridePref != null) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (builder)=>RideScreen(ridePref: ridePref,))
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Please select the departure & arrival'),
+                        duration: Duration(seconds: 3),
+                      )
+                    );
+                  }
+                },
+              ),
               SizedBox(height: BlaSpacings.m),
               // 3 - THE HISTORY
               _buildHistory(),
